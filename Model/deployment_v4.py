@@ -327,8 +327,6 @@ from soynlp.tokenizer import LTokenizer
 # chatbot using code, get the model and use them 
 
 def get_chatbot_instance(model_name, output_dir, num_epoch):
-
-    
     ## Load pickle
     with open(os.path.join(output_dir, "transformermodel_" + model_name + "_Q.pickle"),"rb") as fr:
         Q = pickle.load(fr)
@@ -338,33 +336,13 @@ def get_chatbot_instance(model_name, output_dir, num_epoch):
         
     with open(os.path.join(output_dir, "transformermodel_" + model_name + "_HYPE.pickle"),"rb") as fr:
         [VOCAB_SIZE, text_embedding_vectors, NUM_LAYERS, D_FF, D_MODEL, NUM_HEADS, DROPOUT] = pickle.load(fr)
-    
-    
-    
     VOCAL_SIZE_ = VOCAB_SIZE
-    
-    
-    
-    
-    
     PAD_TOKEN, START_TOKEN, END_TOKEN, UNK_TOKEN = Q.vocab.stoi['<pad>'], Q.vocab.stoi['<SOS>'], Q.vocab.stoi['<EOS>'], Q.vocab.stoi['<unk>']
-    
-    
-    
-    
     cuda_num = "cuda:0"
     device = torch.device(cuda_num if torch.cuda.is_available() else "cpu")
             
     net_trained = transformer(text_embedding_vectors = text_embedding_vectors, vocab_size=VOCAB_SIZE, num_layers=NUM_LAYERS, d_ff=D_FF, d_model=D_MODEL, num_heads=NUM_HEADS, dropout=DROPOUT).to(device)
     net_trained.load_state_dict(torch.load(os.path.join(output_dir, "transformermodel_" + model_name + "_model_"+str(num_epoch)+".pt")))
-    
-    
-    
-
-
-
-
-    
     def stoi(vocab, token, max_len):
       #
       indices=[]
